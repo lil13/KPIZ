@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Working with remote data</title>
+  <meta charset="utf-8"/>
+
+  <!-- Polyfill in case your browser does not support the fetch API -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/0.10.1/fetch.js"></script>
+
+</head>
+<body>
+  <link rel="stylesheet" href="css/styles.css" />
+ <form action="https://jsonplaceholder.typicode.com/users" id="example-form">
+  <div class="form-group" >
+    <label for="first-name"id="name-label" >
+      <input type="text" name="first_name" id="name" required placeholder="Enter your first name">
+      <span class="validity"></span>
+    </label>
+  </div>
+  <div class="form-group">
+    <label for="last-name"id="name-label">
+      <input type="text" name="last_name" id="name"  required placeholder="Enter your last name">
+      <span class="validity"></span>
+    </label>
+  </div>
+  <div class="form-group">
+    <label for="first-name"id="name-label">
+    <input type="text" name="first_name" id="name"  required placeholder="Enter your email">
+    <span class="validity"></span>
+  </label>
+  </div>
+
+  <div class="form-group">
+    <label for="first-name"id="name-label">
+    <input  type="submit" value="Create new user" id="submit" class="button">
+    <span class="validity"></span>
+  </label>
+  </div>
+  
+  </form> 
+
+
+
+
+
+<!-- 
+
+        <p id="description">Thank you for taking the time to help us improve the platform</p>
+
+        <form id="survey-form" action="https://jsonplaceholder.typicode.com/users" id="example-form">
+            <div class="form-group">
+                <label id="name-label" for="first-name">Name:</label>
+                <input id="name" type="text" required placeholder="Enter your first name">
+                <span class="validity"></span>
+            </div>
+
+            <div class="form-group">
+                <label id="name-label" for="last-name">Female:</label>
+                <input id="name" type="text" required placeholder="Enter your female">
+                <span class="validity"></span>
+            </div>
+
+            <div class="form-group">
+                <label id="email-label" for="email">Email:</label>
+                <input id="email" type="email"  required placeholder="Enter your email">
+                <span class="validity"></span>
+            </div>
+
+            <div class="form-group">
+                <input id="submit" class="button" type="submit" value="Submit" >
+            </div>
+            <p align="center">Thank you for submitted!</p>
+        </form> 
+
+
+ -->
+
+
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+<script>
+// function to handle success
+function success() {
+    var data = JSON.parse(this.responseText); //parse the string to JSON
+    console.log(data);
+}
+
+// function to handle error
+function error(err) {
+    console.log('Request Failed', err); //error details will be in the "err" object
+}
+const exampleForm = document.getElementById("example-form");
+
+exampleForm.addEventListener("submit", handleFormSubmit);
+
+
+ async function handleFormSubmit(event) {
+
+  event.preventDefault();
+
+  const form = event.currentTarget;
+
+  const url = form.action;
+
+  try {
+
+    const formData = new FormData(form);
+
+    const responseData = await postFormDataAsJson({ url, formData });
+
+    console.log({ responseData });
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+ async function postFormDataAsJson({ url, formData }) {
+
+  const plainFormData = Object.fromEntries(formData.entries());
+  const formDataJsonString = JSON.stringify(plainFormData);
+
+  const fetchOptions = {
+
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+
+    body: formDataJsonString,
+  };
+
+  const response = await fetch(url, fetchOptions);
+if (!response.ok) {
+    const errorMessage = await response.text();
+    throw new Error(errorMessage);
+  }
+
+  return response.json();
+}
+</script>
+</html>
